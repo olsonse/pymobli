@@ -10,7 +10,7 @@ class index:
     def GET(self):
         i = web.input()
         page = Page("My PAGE")
-        l  = List(style="numbered")
+        l  = List()
         l.items.append(Link(title="Google",href="http://www.google.com"))
         l.items.append(Link(title="My Blog",href="http://patrickshuff.com"))
         l.items.append(Link(title="OHIO STATE",href="http://osu.edu"))
@@ -30,18 +30,23 @@ class Page(object):
 #List types == nested,numbered,read-only,splitbutton
 
 class List(Base):
-    def __init__(self, style="basic", filter="false"):
+    def __init__(self, style="basic", filter="false", inset="false"):
         self.type = "list"
         self.style = style
         self.items = []
         self.filter = filter
+        self.inset = inset
     def __repr__(self):
         if self.style == "numbered": style = "ol"
         else: style = "ul"
         return '''
-<%s data-role="listview" data-filter="%s">
+<%s data-role="listview" data-filter="%s" data-inset="%s">
 %s
-</%s>''' % (style,self.filter,"\n".join(["<li>%s</li>" % a for a in self.items]),style)
+</%s>''' % (style,
+            self.filter,
+            self.inset,
+            "\n".join(["<li>%s</li>" % a for a in self.items]),style)
+
 
 
 class Link(object):
