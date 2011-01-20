@@ -30,17 +30,18 @@ class Page(object):
 #List types == nested,numbered,read-only,splitbutton
 
 class List(Base):
-    def __init__(self, style="basic"):
+    def __init__(self, style="basic", filter="false"):
         self.type = "list"
         self.style = style
         self.items = []
+        self.filter = filter
     def __repr__(self):
         if self.style == "numbered": style = "ol"
         else: style = "ul"
         return '''
-<%s data-role="listview">
+<%s data-role="listview" data-filter="%s">
 %s
-</%s>''' % (style,"\n".join(["<li>%s</li>" % a for a in self.items]),style)
+</%s>''' % (style,self.filter,"\n".join(["<li>%s</li>" % a for a in self.items]),style)
 
 
 class Link(object):
