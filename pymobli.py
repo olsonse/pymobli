@@ -60,6 +60,13 @@ class index:
         b.add(Button(icon="delete"))
         page.content.append(b)
 
+
+        i = Inline()
+        i.add(Button("Cancel"))
+        i.add(Button("Save", theme="b"))
+
+        page.content.append(i)
+
         return render.generic(page)
 
 class Page(object):
@@ -99,6 +106,13 @@ class ButtonGroup(GroupBase):
 %(items)s
 </div>''' % self
     
+class Inline(GroupBase):
+    def __repr__(self):
+        self.items = "\n".join(["%s" % a for a in self.items])
+        return '''
+<div data-inline="true">
+%(items)s
+</div>''' % self
 
 class ItemBase(DictObj):
     def __init__(self, title='',href='',transition='slide', icon="", theme="c"):
@@ -110,12 +124,13 @@ class ItemBase(DictObj):
         if not title and icon:
             self.icon = 'data-icon="%s" data-iconpos="notext"' % icon
         self.quickattrs = '%(href)s %(transition)s' % self
+
 class Link(ItemBase):
     def __repr__(self):
         return '<a %(href)s %(transition)s>%(title)s</a>' % self
 
 class Button(ItemBase):
     def __repr__(self):
-        return '<a data-role="button" %(icon)s %(href)s %(transition)s %(theme)s>%(title)s</a>' % self
+        return '<a data-role="button" %(inline)s %(icon)s %(href)s %(transition)s %(theme)s>%(title)s</a>' % self
 if __name__ == "__main__":
     app.run()
