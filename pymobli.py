@@ -100,23 +100,24 @@ class ButtonGroup(GroupBase):
 class ItemBase(DictObj):
     def __init__(self, title='',href='',transition='slide', icon=""):
         self.title = title
-        self.href = href
-        self.transition = transition
-        self.icon = icon
+        self.href = 'href="%s"' % href
+        self.transition = 'data-transition="%s"' % transition
+        self.icon = 'data-icon="%s"' % icon
 
 class Link(ItemBase):
     def __repr__(self):
         if self.href:
-            return '<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self
+            return '<a %(attributes)s">%(title)s</a>' % self
         else:
-            return '<a data-transition="%(transition)s">%(title)s</a>' % self
+            return '<a %(transition)s>%(title)s</a>' % self
 
 class Button(ItemBase):
     def __repr__(self):
+        self.role = 'data-role="button"'
         if self.icon:
             if not self.title:
-                return '<a href="%(href)s"  data-role="button" data-icon=%(icon)s data-iconpos="notext" data-transition="%(transition)s"></a>' % self
-            return '<a href="%(href)s" data-role="button" data-icon=%(icon)s data-transition="%(transition)s">%(title)s</a>' % self
-        return '<a href="%(href)s" data-role="button" data-transition="%(transition)s">%(title)s</a>' % self
+                return '<a href="%(href)s" %(role)s  %(icon)s data-iconpos="notext" %(transition)s></a>' % self
+            return '<a %(href)s %(role)s %(icon)s %(transition)s">%(title)s</a>' % self
+        return '<a %(href)s %(role)s %(transition)s>%(title)s</a>' % self
 if __name__ == "__main__":
     app.run()
