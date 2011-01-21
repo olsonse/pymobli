@@ -57,7 +57,7 @@ class Link(DictObj):
         self.transition = getattr(kwargs,"transition",transition)
         self.type = "link"
     def __repr__(self):
-        return str('<a href="%s" data-transition="%s">%s</a>' % (self.href, self.transition, self.title))
+        return '<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self
 
 
 if __name__ == "__main__":
