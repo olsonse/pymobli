@@ -51,6 +51,12 @@ class index:
         b.add(Button("X", icon="delete"))
         page.content.append(b)
 
+        b = ButtonGroup(style="horizontal")
+        b.add(Button(icon="arrow-u"))
+        b.add(Button(icon="arrow-d"))
+        b.add(Button(icon="delete"))
+        page.content.append(b)
+
         return render.generic(page)
 
 class Page(object):
@@ -91,7 +97,6 @@ class ButtonGroup(GroupBase):
 </div>''' % self
     
 
-
 class ItemBase(DictObj):
     def __init__(self, title='',href='',transition='slide', icon=""):
         self.title = title
@@ -109,8 +114,9 @@ class Link(ItemBase):
 class Button(ItemBase):
     def __repr__(self):
         if self.icon:
+            if not self.title:
+                return '<a href="%(href)s"  data-role="button" data-icon=%(icon)s data-iconpos="notext" data-transition="%(transition)s"></a>' % self
             return '<a href="%(href)s" data-role="button" data-icon=%(icon)s data-transition="%(transition)s">%(title)s</a>' % self
-        else:
-            return '<a href="%(href)s" data-role="button" data-transition="%(transition)s">%(title)s</a>' % self
+        return '<a href="%(href)s" data-role="button" data-transition="%(transition)s">%(title)s</a>' % self
 if __name__ == "__main__":
     app.run()
