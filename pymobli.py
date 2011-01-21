@@ -43,7 +43,12 @@ class index:
         b.add(Button("Yes"))
         b.add(Button("No"))
         b.add(Button("Maybe"))
+        page.content.append(b)
 
+        b = ButtonGroup(style="horizontal")
+        b.add(Button("Up", icon="arrow-u"))
+        b.add(Button("Down", icon="arrow-d"))
+        b.add(Button("X", icon="delete"))
         page.content.append(b)
 
         return render.generic(page)
@@ -74,6 +79,7 @@ class List(DictObj):
 %(items)s
 </%(style)s>''' % self
 
+
 class ButtonGroup(List):
     def __init__(self, style=""):
         self.style = style
@@ -86,21 +92,26 @@ class ButtonGroup(List):
 </div>''' % self
     
 
-class Link(DictObj):
-    def __init__(self, title='',href='',transition='slide'):
+
+class ItemBase(DictObj):
+    def __init__(self, title='',href='',transition='slide', icon=""):
         self.title = title
         self.href = href
         self.transition = transition
-        self.type = "link"
+        self.icon = icon
+
+class Link(ItemBase):
     def __repr__(self):
         if self.href:
             return '<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self
         else:
             return '<a data-transition="%(transition)s">%(title)s</a>' % self
 
-class Button(Link):
+class Button(ItemBase):
     def __repr__(self):
-        return '<a href="%(href)s" data-role="button" data-transition="%(transition)s">%(title)s</a>' % self
-
+        if self.icon:
+            return '<a href="%(href)s" data-role="button" data-icon=%(icon)s data-transition="%(transition)s">%(title)s</a>' % self
+        else:
+            return '<a href="%(href)s" data-role="button" data-transition="%(transition)s">%(title)s</a>' % self
 if __name__ == "__main__":
     app.run()
