@@ -18,7 +18,11 @@ class index:
         page = Page("Example Page Title")
 
         #Header Title
-        page.header.title = "Example Page"
+        #page.header.title = "Example Page"
+
+        page.header.add(Link(title="Back",href="#"))
+        page.header.add(Title(title="Example Page"))
+        page.header.add(Link(title="Yahoo",href="http://www.yahoo.com"))
 
         l  = List(inset="true")
         ## Link definitions
@@ -60,6 +64,8 @@ class index:
         b.add(Button("X", icon="delete"))
         page.content.append(b)
 
+        page.content.append(Text(content="Horizontal buttons", type="code"))
+
         b = ButtonGroup(style="horizontal")
         b.add(Button(icon="arrow-u"))
         b.add(Button(icon="arrow-d"))
@@ -78,24 +84,28 @@ class index:
 class Page(object):
     def __init__(self, title=""):
         self.title = title
-        self.header = Header()
+        self.header = Header(title="")
         self.content = []
         self.footer = []
 
 #List types == nested,numbered,read-only,splitbutton
-class Header(list):
-    def __init__(self, title=""):
-        self.title = title
+class Header(GroupBase):
     def __repr__(self):
+        self.items = "\n".join(["%s" % a for a in self.items])
         return '''
 <div data-role="header">
-<h1>%(title)s</h1>
+%(items)s
 </div>
 ''' % self
 
+class Title(GroupBase):
+    def __repr__(self):
+        return '<h1>%(title)s</h1>' % self
+
 class GroupBase(DictObj):
-    def __init__(self, style="", filter="false", inset="false"):
+    def __init__(self, style="", filter="false", inset="false", title=""):
         self.style = style
+        self.title = title
         self.items = []
         self.filter = filter
         self.inset = inset
