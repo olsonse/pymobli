@@ -6,6 +6,10 @@ urls = (
 app = web.application(urls, globals())
 render = web.template.render('html/')
 
+class DictObj(object):
+    def __getitem__(self, attr):
+        return getattr(self,attr,"")
+
 class index:        
     def GET(self):
         i = web.input()
@@ -29,27 +33,24 @@ class Page(object):
 
 #List types == nested,numbered,read-only,splitbutton
 
-class List(Base):
+class List(DictObj):
     def __init__(self, style="basic", filter="false", inset="false"):
         self.type = "list"
         self.style = style
         self.items = []
         self.filter = filter
         self.inset = inset
-    def __repr__(self):
-        if self.style == "numbered": style = "ol"
-        else: style = "ul"
+    def __unicode__(self):
+        if self.style == "numbered": self.style = "ol"
+        else: self.style = "ul"
+        self.items = "\n".join(["<li>%s</li>" % a for a in self.items])
         return '''
-<%s data-role="listview" data-filter="%s" data-inset="%s">
-%s
-</%s>''' % (style,
-            self.filter,
-            self.inset,
-            "\n".join(["<li>%s</li>" % a for a in self.items]),style)
+<%(style)s data-role="listview" data-filter="%(filter)s" data-inset="%(inset)s">
+%(items)s
+</%(style)s>''' % self
 
 
-
-class Link(object):
+class Link(DictObj):
     def __init__(self, title='',href='',transition='slide',**kwargs):
         self.title = getattr(kwargs,"title",title)
         self.href = getattr(kwargs,"href",href)
