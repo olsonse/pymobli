@@ -32,6 +32,9 @@ class index:
         page.content.append(l)
 
         page.content.append(Button("This is a button","http://jquery.com"))
+
+        page.content.append(Button('This is an "a" themed button',"http://jquery.com", theme="a"))
+        page.content.append(Button('This is a "b" themed button',"http://jquery.com", theme="b"))
         
         b = ButtonGroup()
         b.add(Button("This is a button group","http://jquery.com"))
@@ -40,7 +43,7 @@ class index:
         page.content.append(b)
 
         b = ButtonGroup(style="horizontal")
-        b.add(Button("Yes"))
+        b.add(Button("Yes", theme="e"))
         b.add(Button("No"))
         b.add(Button("Maybe"))
         page.content.append(b)
@@ -98,11 +101,12 @@ class ButtonGroup(GroupBase):
     
 
 class ItemBase(DictObj):
-    def __init__(self, title='',href='',transition='slide', icon=""):
+    def __init__(self, title='',href='',transition='slide', icon="", theme="c"):
         self.title = title
         self.href = href and 'href="%s"' % href or ""
         self.transition = transition and 'data-transition="%s"' % transition or ""
         self.icon = icon and 'data-icon="%s"' % icon or ""
+        self.theme = theme and 'data-theme="%s"' % theme or ""
         if not title and icon:
             self.icon = 'data-icon="%s" data-iconpos="notext"' % icon
         self.quickattrs = '%(href)s %(transition)s' % self
@@ -112,6 +116,6 @@ class Link(ItemBase):
 
 class Button(ItemBase):
     def __repr__(self):
-        return '<a data-role="button" %(icon)s %(href)s %(transition)s>%(title)s</a>' % self
+        return '<a data-role="button" %(icon)s %(href)s %(transition)s %(theme)s>%(title)s</a>' % self
 if __name__ == "__main__":
     app.run()
