@@ -15,29 +15,29 @@ class index:
         i = web.input()
         page = Page("My PAGE")
         l  = List()
+        ## Link definitions
+        l.items.append(Link("OHIO STATE","http://osu.edu"))
         l.items.append(Link(title="Google",href="http://www.google.com"))
-        l.items.append(Link(title="My Blog",href="http://patrickshuff.com"))
-        l.items.append(Link(title="OHIO STATE",href="http://osu.edu"))
+        d = {"title":"My Blog", "href":"http://patrickshuff.com"}
+        l.items.append(Link(**d))
+
         page.content.append(l)
         return render.generic(page)
 
-class Base(object):
-    items = []
-
 class Page(object):
-    def __init__(self, title="", **kwargs):
-        self.title = getattr(kwargs,'title','')
-        self.header = getattr(kwargs,"header",[])
-        self.content = getattr(kwargs,"content",[])
-        self.footer = getattr(kwargs,"footer",[])
+    def __init__(self, title="", header=[], content=[], footer=[]):
+        self.title = title
+        self.header = header
+        self.content = content
+        self.footer = footer
 
 #List types == nested,numbered,read-only,splitbutton
 
 class List(DictObj):
-    def __init__(self, style="basic", filter="false", inset="false"):
+    def __init__(self, style="basic", filter="false", inset="false", items=[]):
         self.type = "list"
         self.style = style
-        self.items = []
+        self.items = items
         self.filter = filter
         self.inset = inset
     def __unicode__(self):
@@ -51,10 +51,10 @@ class List(DictObj):
 
 
 class Link(DictObj):
-    def __init__(self, title='',href='',transition='slide',**kwargs):
-        self.title = getattr(kwargs,"title",title)
-        self.href = getattr(kwargs,"href",href)
-        self.transition = getattr(kwargs,"transition",transition)
+    def __init__(self, title='',href='',transition='slide'):
+        self.title = title
+        self.href = href
+        self.transition = transition
         self.type = "link"
     def __repr__(self):
         return '<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self
