@@ -40,7 +40,7 @@ class List(DictObj):
         self.items = []
         self.filter = filter
         self.inset = inset
-    def __unicode__(self):
+    def __repr__(self):
         if self.style == "numbered": self.style = "ol"
         else: self.style = "ul"
         self.items = "\n".join(["<li>%s</li>" % a for a in self.items])
@@ -56,8 +56,8 @@ class Link(DictObj):
         self.href = href
         self.transition = transition
         self.type = "link"
-    def __unicode__(self):
-        return str('<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self)
+    def __repr__(self):
+        return '<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self
 
 if __name__ == "__main__":
     app.run()
