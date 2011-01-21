@@ -60,7 +60,7 @@ class index:
         b.add(Button(icon="delete"))
         page.content.append(b)
 
-        
+        page.content.append(Text(content="Inline buttons"))
         i = Inline()
         i.add(Button("Cancel", inline="true"))
         i.add(Button("Save", theme="b",inline="true"))
