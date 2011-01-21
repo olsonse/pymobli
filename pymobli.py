@@ -36,8 +36,16 @@ class index:
         b = ButtonGroup()
         b.add(Button("This is a button group","http://jquery.com"))
         b.add(Button("Boom","http://boom.com"))
-        
+
         page.content.append(b)
+
+        b = ButtonGroup(style="horizontal")
+        b.add(Button("Yes"))
+        b.add(Button("No"))
+        b.add(Button("Maybe"))
+
+        page.content.append(b)
+
         return render.generic(page)
 
 class Page(object):
@@ -50,8 +58,7 @@ class Page(object):
 #List types == nested,numbered,read-only,splitbutton
 
 class List(DictObj):
-    def __init__(self, style="basic", filter="false", inset="false"):
-        self.type = "list"
+    def __init__(self, style="", filter="false", inset="false"):
         self.style = style
         self.items = []
         self.filter = filter
@@ -68,10 +75,13 @@ class List(DictObj):
 </%(style)s>''' % self
 
 class ButtonGroup(List):
+    def __init__(self, style=""):
+        self.style = style
+        self.items = []
     def __repr__(self):
         self.items = "\n".join(["%s" % a for a in self.items])
         return '''
-<div data-role="controlgroup">
+<div data-role="controlgroup" data-type="%(style)s">
 %(items)s
 </div>''' % self
     
