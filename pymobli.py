@@ -60,10 +60,10 @@ class index:
         b.add(Button(icon="delete"))
         page.content.append(b)
 
-
+        
         i = Inline()
-        i.add(Button("Cancel"))
-        i.add(Button("Save", theme="b"))
+        i.add(Button("Cancel", inline="true"))
+        i.add(Button("Save", theme="b",inline="true"))
 
         page.content.append(i)
 
@@ -97,6 +97,13 @@ class List(GroupBase):
 %(items)s
 </%(style)s>''' % self
 
+class Text(DictObj):
+    def __init__(self,content="", type=""):
+        self.content = content
+        if type == "code": self.tag = "code"
+        else: self.tag = "p"
+    def __repr__(self):
+        return "<%(tag)s>%(content)s</%(code)s>" % self
 
 class ButtonGroup(GroupBase):
     def __repr__(self):
@@ -115,12 +122,13 @@ class Inline(GroupBase):
 </div>''' % self
 
 class ItemBase(DictObj):
-    def __init__(self, title='',href='',transition='slide', icon="", theme="c"):
+    def __init__(self, title='',href='',transition='slide', icon="", theme="c", inline=""):
         self.title = title
         self.href = href and 'href="%s"' % href or ""
         self.transition = transition and 'data-transition="%s"' % transition or ""
         self.icon = icon and 'data-icon="%s"' % icon or ""
         self.theme = theme and 'data-theme="%s"' % theme or ""
+        self.inline = inline and 'data-inline="%s"' % inline or ""
         if not title and icon:
             self.icon = 'data-icon="%s" data-iconpos="notext"' % icon
         self.quickattrs = '%(href)s %(transition)s' % self
