@@ -105,12 +105,13 @@ class ItemBase(DictObj):
         self.icon = icon and 'data-icon="%s"' % icon or ""
         if not title and icon:
             self.icon = 'data-icon="%s" data-iconpos="notext"' % icon
+        self.quickattrs = '%(href)s %(transition)s' % self
 class Link(ItemBase):
     def __repr__(self):
-        return '<a %(transition)s %(href)s>%(title)s</a>' % self
+        return '<a %(href)s %(transition)s>%(title)s</a>' % self
 
 class Button(ItemBase):
     def __repr__(self):
-        return '<a data-role="button" %(icon)s %(href)s %(role)s %(transition)s>%(title)s</a>' % self
+        return '<a data-role="button" %(icon)s %(href)s %(transition)s>%(title)s</a>' % self
 if __name__ == "__main__":
     app.run()
