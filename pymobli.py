@@ -31,7 +31,13 @@ class index:
         l.add(Link(**d))
         page.content.append(l)
 
-        page.content.append(Button("OHIO STATE","http://osu.edu"))
+        page.content.append(Button("This is a button","http://jquery.com"))
+        
+        b = ButtonGroup()
+        b.add(Button("This is a button group","http://jquery.com"))
+        b.add(Button("Boom","http://boom.com"))
+        
+        page.content.append(b)
         return render.generic(page)
 
 class Page(object):
@@ -61,6 +67,14 @@ class List(DictObj):
 %(items)s
 </%(style)s>''' % self
 
+class ButtonGroup(List):
+    def __repr__(self):
+        self.items = "\n".join(["%s" % a for a in self.items])
+        return '''
+<div data-role="controlgroup">
+%(items)s
+</div>''' % self
+    
 
 class Link(DictObj):
     def __init__(self, title='',href='',transition='slide'):
