@@ -20,7 +20,7 @@ class index:
         #Header Title
         #page.header.title = "Example Page"
 
-        page.header.add(Link(title="Back",href="#"))
+        page.header.add(Button(title="Back",href="#", icon="arrow-l", theme="e"))
         page.header.add(Title(title="Example Page"))
         page.header.add(Link(title="Yahoo",href="http://www.yahoo.com"))
 
