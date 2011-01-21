@@ -13,7 +13,13 @@ class DictObj(object):
 class index:        
     def GET(self):
         i = web.input()
-        page = Page("My PAGE")
+        
+        #Browser Title
+        page = Page("Example Page Title")
+
+        #Header Title
+        page.header.title = "Example Page"
+
         l  = List(inset="true")
         ## Link definitions
         l.add(Link("OHIO STATE","http://osu.edu"))
@@ -72,11 +78,20 @@ class index:
 class Page(object):
     def __init__(self, title=""):
         self.title = title
-        self.header = []
+        self.header = Header()
         self.content = []
         self.footer = []
 
 #List types == nested,numbered,read-only,splitbutton
+class Header(list):
+    def __init__(self, title=""):
+        self.title = title
+    def __repr__(self):
+        return '''
+<div data-role="header">
+<h1>%(title)s</h1>
+</div>
+''' % self
 
 class GroupBase(DictObj):
     def __init__(self, style="", filter="false", inset="false"):
