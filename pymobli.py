@@ -62,7 +62,7 @@ class Page(object):
 
 #List types == nested,numbered,read-only,splitbutton
 
-class List(DictObj):
+class GroupBase(DictObj):
     def __init__(self, style="", filter="false", inset="false"):
         self.style = style
         self.items = []
@@ -70,6 +70,8 @@ class List(DictObj):
         self.inset = inset
     def add(self,li):
         self.items.append(li)
+    
+class List(GroupBase):
     def __repr__(self):
         if self.style == "numbered": self.style = "ol"
         else: self.style = "ul"
@@ -80,10 +82,7 @@ class List(DictObj):
 </%(style)s>''' % self
 
 
-class ButtonGroup(List):
-    def __init__(self, style=""):
-        self.style = style
-        self.items = []
+class ButtonGroup(GroupBase):
     def __repr__(self):
         self.items = "\n".join(["%s" % a for a in self.items])
         return '''
