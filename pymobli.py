@@ -19,25 +19,25 @@ class index:
         l.items.append(Link("OHIO STATE","http://osu.edu"))
         l.items.append(Link(title="Google",href="http://www.google.com"))
         d = {"title":"My Blog", "href":"http://patrickshuff.com"}
+        l.items.append(Link("Broken Link"))
         l.items.append(Link(**d))
-
         page.content.append(l)
         return render.generic(page)
 
 class Page(object):
-    def __init__(self, title="", header=[], content=[], footer=[]):
+    def __init__(self, title=""):
         self.title = title
-        self.header = header
-        self.content = content
-        self.footer = footer
+        self.header = []
+        self.content = []
+        self.footer = []
 
 #List types == nested,numbered,read-only,splitbutton
 
 class List(DictObj):
-    def __init__(self, style="basic", filter="false", inset="false", items=[]):
+    def __init__(self, style="basic", filter="false", inset="false"):
         self.type = "list"
         self.style = style
-        self.items = items
+        self.items = []
         self.filter = filter
         self.inset = inset
     def __unicode__(self):
@@ -56,9 +56,8 @@ class Link(DictObj):
         self.href = href
         self.transition = transition
         self.type = "link"
-    def __repr__(self):
-        return '<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self
-
+    def __unicode__(self):
+        return str('<a href="%(href)s" data-transition="%(transition)s">%(title)s</a>' % self)
 
 if __name__ == "__main__":
     app.run()
