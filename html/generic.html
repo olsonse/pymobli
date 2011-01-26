@@ -9,10 +9,7 @@ $def with (p)
   </head>
   <body>
     <div data-role="page"> 
-	<div data-role="header">
-	  <h1>Page Title</h1>
-	</div>
-	
+      $:p.header
 	<div data-role="content" class="ui-content">
 	    $for c in p.content:
 		$:c
