@@ -89,6 +89,16 @@ class Page(object):
         self.footer = []
 
 #List types == nested,numbered,read-only,splitbutton
+class GroupBase(DictObj):
+    def __init__(self, style="", filter="false", inset="false", title=""):
+        self.style = style
+        self.title = title
+        self.items = []
+        self.filter = filter
+        self.inset = inset
+    def add(self,li):
+        self.items.append(li)
+
 class Header(GroupBase):
     def __repr__(self):
         self.items = "\n".join(["%s" % a for a in self.items])
@@ -102,15 +112,6 @@ class Title(GroupBase):
     def __repr__(self):
         return '<h1>%(title)s</h1>' % self
 
-class GroupBase(DictObj):
-    def __init__(self, style="", filter="false", inset="false", title=""):
-        self.style = style
-        self.title = title
-        self.items = []
-        self.filter = filter
-        self.inset = inset
-    def add(self,li):
-        self.items.append(li)
     
 class List(GroupBase):
     def __repr__(self):
