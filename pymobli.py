@@ -64,7 +64,7 @@ class index:
         b.add(Button("X", icon="delete"))
         page.content.append(b)
 
-        page.content.append(Text(content="Horizontal buttons", type="code"))
+        #page.content.append(Text(content="Horizontal buttons", type="code"))
 
         b = ButtonGroup(style="horizontal")
         b.add(Button(icon="arrow-u"))
@@ -72,7 +72,7 @@ class index:
         b.add(Button(icon="delete"))
         page.content.append(b)
 
-        page.content.append(Text(content="Inline buttons"))
+        #page.content.append(Text(content="Inline buttons"))
         i = Inline()
         i.add(Button("Cancel", inline="true"))
         i.add(Button("Save", theme="b",inline="true"))
