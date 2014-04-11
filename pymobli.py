@@ -97,3 +97,13 @@ class Button(ItemBase):
     def __repr__(self):
         return '<a data-role="button" %(other)s %(inline)s %(icon)s %(href)s %(transition)s %(theme)s>%(title)s</a>' % self
 
+class Image(ItemBase):
+    def __init__(self, src='', width='', height='', *args, **kwargs):
+      ItemBase.__init__(self, *args, **kwargs)
+      self.src = src and 'src="%s"' % src or ""
+      self.width = width and 'width="%s"' % width or ""
+      self.height = height and 'height="%s"' % height or ""
+
+
+    def __repr__(self):
+        return '<img data-role="image" %(other)s %(inline)s %(icon)s %(src)s %(width)s %(height)s %(transition)s %(theme)s alt="%(title)s"/>' % self
