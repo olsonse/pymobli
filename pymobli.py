@@ -70,7 +70,8 @@ class Inline(GroupBase):
 </div>''' % self
 
 class ItemBase(DictObj):
-    def __init__(self, title='',href='',transition='slide', icon="", theme="c", inline=""):
+    def __init__(self, title='', href='', transition='slide', icon="",
+                 theme="c", inline="", other=dict(), **kwargs):
         self.title = title
         self.href = href and 'href="%s"' % href or ""
         self.transition = transition and 'data-transition="%s"' % transition or ""
@@ -80,11 +81,19 @@ class ItemBase(DictObj):
         if not title and icon:
             self.icon = 'data-icon="%s" data-iconpos="notext"' % icon
         self.quickattrs = '%(href)s %(transition)s' % self
+        self._other = other
+        self._kwargs = kwargs
+    @property
+    def other(self):
+        other = dict( self._other )
+        other.update( self._kwargs )
+        return ' '.join(['{}="{}"'.format(*i) for i in other.items()])
 
 class Link(ItemBase):
     def __repr__(self):
-        return '<a %(href)s %(transition)s>%(title)s</a>' % self
+        return '<a %(other)s %(href)s %(transition)s>%(title)s</a>' % self
 
 class Button(ItemBase):
     def __repr__(self):
-        return '<a data-role="button" %(inline)s %(icon)s %(href)s %(transition)s %(theme)s>%(title)s</a>' % self
+        return '<a data-role="button" %(other)s %(inline)s %(icon)s %(href)s %(transition)s %(theme)s>%(title)s</a>' % self
+
