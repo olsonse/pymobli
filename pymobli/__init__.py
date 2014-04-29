@@ -23,10 +23,17 @@ class DictBase(dict):
       for i in self.attributes.items()
     ])
   def dict(self, **kw):
-    D = self.copy()
+    D = super(DictBase,self).copy()
     D['attrib'] = self.attrib
     D.update(kw)
     return D
+  def copy(self):
+    return DictBase( super(DictBase,self).copy() )
+
+def is_list(a):
+  # for the context of tags and content here, str types are not iterable
+  if type(a) in [list, tuple]: return True
+  return False
 
 #List types == nested,numbered,read-only,splitbutton
 class GroupBase(DictBase):
@@ -35,7 +42,8 @@ class GroupBase(DictBase):
     super(GroupBase,self).__init__(*args,**kwargs)
     self.style = style
     self.title = title
-    self.items = (content == '' and []) or [content]
+    self.items = (content == '' and []) or \
+                 (is_list(content) and content) or [content]
     self.filter = filter
     self.inset = inset
   def add(self,li):
@@ -65,7 +73,6 @@ class Title(GroupBase):
   def __repr__(self):
     return '<h{level} {attrib}>{title}{items}</h{level}>'.format(**self.dict())
 
-    
 class List(GroupBase):
     def __repr__(self):
         style = "ul"
@@ -103,6 +110,10 @@ class Div(GroupBase):
     def __repr__(self):
         return '<div %(attrib)s> %(items)s </div>' % self.dict()
 
+class Form(GroupBase):
+    def __repr__(self):
+        return '<form %(attrib)s> %(items)s </form>' % self.dict()
+
 class ItemBase(DictBase):
     def __init__(self, title='', href='', transition='slide', icon="",
                  theme="c", inline="", *args, **kwargs):
@@ -119,7 +130,7 @@ class ItemBase(DictBase):
 
 class Link(ItemBase):
     def __repr__(self):
-        return '<a %(attrib)s %(href)s %(transition)s>%(title)s</a>' \
+        return '<a %(attrib)s %(href)s %(transition)s %(theme)s>%(title)s</a>' \
                 % self.dict()
 
 class Button(ItemBase):
@@ -138,3 +149,39 @@ class Image(ItemBase):
         return '<img data-role="image" %(attrib)s %(inline)s %(icon)s ' \
                '%(src)s %(width)s %(height)s %(transition)s %(theme)s ' \
                'alt="%(title)s"/>' % self.dict()
+
+# some stuff useful for forms
+# TODO:  move this into a subpackage for forms
+class Label(GroupBase):
+  def __init__(self, _for='', hidden=False, *args, **kwargs):
+    super(Label,self).__init__(*args, **kwargs)
+    self._for = _for
+    if hidden:
+      self.attributes['class']='ui-hidden-accessible'
+  def __repr__(self):
+    return '<label for={_for} {attrib}>{title}{items}</label>' \
+           .format(**self.dict())
+
+class Input(DictBase):
+    def __init__(self, theme='a', *args, **kwargs):
+        super(Input,self).__init__(*args,**kwargs)
+        self.theme = (theme and 'data-theme="{}"'.format(theme)) or ''
+    def __repr__(self):
+        return "<input %(attrib)s %(theme)s />" % self.dict()
+
+class FormInput(object):
+  def __init__(self, type, id, name, value='', placeholder='', theme='a',
+               label='', label_attrib=dict(), input_attrib=dict() ):
+    self.label = Label( _for=id, title=label, attrib=input_attrib )
+    self.input = Input(
+      type=type, name=name, id=id, value=value,
+      placeholder=placeholder, theme=theme, attrib=input_attrib,
+    )
+  def __repr__(self):
+     return '{} {}'.format(self.label, self.input)
+
+class FormButton(ItemBase):
+    def __repr__(self):
+        return '<button {attrib} {inline} {icon} ' \
+               '{transition} {theme}>{title}</button>' \
+               .format( **self.dict() )
