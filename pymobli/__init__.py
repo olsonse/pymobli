@@ -98,7 +98,7 @@ class ButtonGroup(GroupBase):
 <div data-role="controlgroup" data-type="%(style)s" %(attrib)s>
 %(items)s
 </div>''' % self.dict()
-    
+
 class Inline(GroupBase):
     def __repr__(self):
         return '''
@@ -170,11 +170,11 @@ class Input(DictBase):
         return "<input %(attrib)s %(theme)s />" % self.dict()
 
 class FormInput(object):
-  def __init__(self, type, id, name, value='', placeholder='', theme='a',
+  def __init__(self, type, name, value='', placeholder='', theme='a',
                label='', label_attrib=dict(), input_attrib=dict() ):
-    self.label = Label( _for=id, title=label, attrib=input_attrib )
+    self.label = Label( _for=name, title=label, attrib=input_attrib )
     self.input = Input(
-      type=type, name=name, id=id, value=value,
+      type=type, name=name, id=name, value=value,
       placeholder=placeholder, theme=theme, attrib=input_attrib,
     )
   def __repr__(self):
@@ -185,3 +185,38 @@ class FormButton(ItemBase):
         return '<button {attrib} {inline} {icon} ' \
                '{transition} {theme}>{title}</button>' \
                .format( **self.dict() )
+
+
+class FormSelectOption(GroupBase):
+  def __init__(self, *args, **kwargs):
+    selected = (kwargs.pop('selected',False) and 'selected') or ''
+    super(FormSelectOption,self).__init__(*args, **kwargs)
+    self.selected = selected
+
+  def __repr__(self):
+    D = self.dict()
+    return '<option {attrib} {selected}>{title}{items}</option>'.format(**D)
+
+class FormSelect(list):
+  def __init__(self, name, label='Select:', *args, **kwargs):
+    super(FormSelect,self).__init__(*args, **kwargs)
+    self.name = name
+    self.label=label
+
+  def add(self, value, content=None, selected=False):
+    self.append(FormSelectOption(
+      value=value, content=(content or value), selected=selected,
+    ))
+
+  def __repr__(self):
+    return \
+      '<div class="ui-field-contain">\n' \
+      '  <label for="{name}">{label}</label>\n' \
+      '  <select name="{name}" id="{name}">\n' \
+      '    {options}\n' \
+      '  </select>\n' \
+      '</div>' \
+      .format(
+        name=self.name, label=self.label,
+        options='\n'.join([ repr(i) for i in self ]),
+      )
