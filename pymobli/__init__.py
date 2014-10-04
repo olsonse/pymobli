@@ -110,6 +110,30 @@ class Div(GroupBase):
     def __repr__(self):
         return '<div %(attrib)s> %(items)s </div>' % self.dict()
 
+class Video(GroupBase):
+  class Source(object):
+    def __init__(self, src, type):
+      self.src = src
+      self.type = type
+    def __repr__(self):
+      return '<source src="{src}" type="{type}">' \
+        .format(src=self.src, type=self.type)
+  def __init__(self, autoplay=False, controls=True, loop=False, muted=False,
+               *args, **kwargs):
+    super(Video,self).__init__(*args, **kwargs)
+    self._autoplay = autoplay
+    self._controls = controls
+    self._loop = loop
+    self._muted = muted
+  def __repr__(self):
+    return \
+    '<video {attrib} {autoplay} {controls} {loop} {muted}> {items}\n</video>' \
+      .format(autoplay = self._autoplay and 'autoplay' or '',
+              controls = self._controls and 'controls' or '',
+              loop     = self._loop     and 'loop '    or '',
+              muted    = self._muted    and 'muted '   or '',
+              **self.dict())
+
 class Form(GroupBase):
     def __repr__(self):
         return '<form %(attrib)s> %(items)s </form>' % self.dict()
