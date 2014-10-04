@@ -163,18 +163,22 @@ class Label(GroupBase):
            .format(**self.dict())
 
 class Input(DictBase):
-    def __init__(self, theme='a', *args, **kwargs):
+    def __init__(self, theme='a', autofocus=False, *args, **kwargs):
         super(Input,self).__init__(*args,**kwargs)
         self.theme = (theme and 'data-theme="{}"'.format(theme)) or ''
+        self._autofocus = autofocus
     def __repr__(self):
-        return "<input %(attrib)s %(theme)s />" % self.dict()
+        return '<input {attrib} {theme} {autofocus}/>' \
+          .format( autofocus = self._autofocus and 'autofocus' or '',
+                   **self.dict() )
 
 class FormInput(object):
   def __init__(self, type, name, value='', placeholder='', theme='a',
-               label='', label_attrib=dict(), input_attrib=dict() ):
+               label='', autofocus=False,
+               label_attrib=dict(), input_attrib=dict() ):
     self.label = Label( _for=name, title=label, attrib=input_attrib )
     self.input = Input(
-      type=type, name=name, id=name, value=value,
+      type=type, name=name, id=name, value=value, autofocus=autofocus,
       placeholder=placeholder, theme=theme, attrib=input_attrib,
     )
   def __repr__(self):
